@@ -71,3 +71,17 @@ resource "aws_route" "default_route" {
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.app_vpc.id
 }
+resource "aws_vpc_security_group_egress_rule" "allow_http_ipv4_rds" {
+  security_group_id = aws_security_group.allow_tls.id
+  cidr_ipv4         = aws_vpc.app_vpc.cidr_block
+  from_port         = 3306
+  ip_protocol       = "tcp"
+  to_port           = 3306
+}
+resource "aws_vpc_security_group_ingress_rule" "allow_tls_ipv4_rds" {
+  security_group_id = aws_security_group.allow_tls.id
+  cidr_ipv4         = aws_vpc.app_vpc.cidr_block
+  from_port         = 3306
+  ip_protocol       = "tcp"
+  to_port           = 3306
+}

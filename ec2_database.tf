@@ -1,4 +1,4 @@
-resource "aws_db_instance" "example" {
+resource "aws_db_instance" "example"  {
   allocated_storage    = 10
   db_name              = "mydb"
   engine               = "mysql"
@@ -8,4 +8,5 @@ resource "aws_db_instance" "example" {
   password             = aws_secretsmanager_secret_version.example.secret_string
   parameter_group_name = "default.mysql8.0"
   skip_final_snapshot  = true
+  vpc_security_group_ids = [aws_security_group.allow_tls.id]
 }
