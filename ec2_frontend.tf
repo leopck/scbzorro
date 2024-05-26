@@ -6,11 +6,16 @@ resource "aws_instance" "frontend" {
   user_data = <<-EOF
                   #!/bin/bash
                   yum update -y
-                  yum install -y nginx
-                  echo 'Hello from New South Wales from Zorro' > /index.txt
+                  yum install -y nginx git
                   systemctl start nginx
                   systemctl enable nginx
-                  echo 'Hello from New South Wales from Zorro' > /usr/share/nginx/html/index.html 
+                  #git clone https://github.com/zhemein/nodejs-express-mysql 
+                  git clone https://github.com/leopck/nodejs-express-mysql 
+                  cp nodejs-express-mysql/frontend/* /usr/share/nginx/html/
+                  source /etc/environment
+                  sed -i "s|%%API_URL%%|$BACKEND_URL|g" /usr/share/nginx/html/index.html
+                  systemctl restart nginx
+                  #echo 'Hello from New South Wales from Zorro' > /usr/share/nginx/html/index.html 
                   EOF 
   tags = {
     Name = "tf-frontend"
